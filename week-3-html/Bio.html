@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bio Page</title>
+</head>
+<body>
+
+    <header>
+        <h1>Welcome to My Bio Page</h1>
+
+        <nav aria-label="Main navigation">
+            <a href="bio.html">Home</a> |
+            <a href="#projects">Projects</a> |
+            <a href="#contact">Contact</a> |
+            <a href="https://github.com/" target="_blank" rel="noopener noreferrer">
+    GitHub </a>
+        </nav>
+    </header>
+
+    <main>
+        <section aria-labelledby="about-heading">
+            <h2 id="about-heading">About Me</h2>
+
+            <img src="https://c8.alamy.com/comp/PY180E/image-of-wooden-book-shelf-with-books-in-library-PY180E.jpg"
+                 alt="A wooden bookshelf filled with books in a library"
+                 width="400">
+
+            <p>
+                This is my bio page where I will share information about myself,
+                my hobbies, my projects, and how to contact me.
+            </p>
+        </section>
+
+        <section aria-labelledby="hobbies-heading">
+            <h2 id="hobbies-heading">My Hobbies</h2>
+
+            <ul>
+                <li>Coding</li>
+                <li>Reading</li>
+                <li>Learning English</li>
+            </ul>
+        </section>
+
+        <section id="projects" aria-labelledby="projects-heading">
+            <h2 id="projects-heading">My Projects and Links</h2>
+
+            <p>Here are some useful links:</p>
+
+            <ul>
+                <li>
+                    <a href="https://www.w3schools.com/html/" target="_blank">
+                        Learn HTML on W3Schools
+                    </a>
+                </li>
+                <li>
+                    <a href="https://github.com/" target="_blank" rel="noopener noreferrer">
+                        GitHub
+                    </a>
+                </li>
+                <li>
+                    <a href="#contact">
+                        Contact Me
+                    </a>
+                </li>
+            </ul>
+        </section>
+
+        <section aria-labelledby="schedule-heading">
+            <h2 id="schedule-heading">My Weekly Schedule</h2>
+
+            <table border="1">
+                <caption>My weekly study schedule</caption>
+                <tr>
+                    <th scope="col">Day</th>
+                    <th scope="col">Activity</th>
+                </tr>
+                <tr>
+                    <td>Monday</td>
+                    <td>Study HTML</td>
+                </tr>
+                <tr>
+                    <td>Tuesday</td>
+                    <td>Practice Coding</td>
+                </tr>
+            </table>
+        </section>
+
+        <section id="contact" aria-labelledby="contact-heading">
+            <h2 id="contact-heading">Contact Me</h2>
+
+            <form action="#" method="post">
+                <p>
+                    <label for="name">Name:</label><br>
+                    <input 
+                        type="text" 
+                        id="name" 
+                        name="name" 
+                        required 
+                        minlength="2">
+                </p>
+
+                <p>
+                    <label for="email">Email:</label><br>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        required>
+                </p>
+
+                <p>
+                    <label for="topic">Topic:</label><br>
+                    <select id="topic" name="topic" required>
+                        <option value="">Choose a topic</option>
+                        <option value="project">Project</option>
+                        <option value="question">Question</option>
+                        <option value="feedback">Feedback</option>
+                    </select>
+                </p>
+
+                <p>
+                    <label for="phone">Phone Number:</label><br>
+                    <input 
+                        type="tel" 
+                        id="phone" 
+                        name="phone" 
+                        pattern="[0-9]{8,10}" 
+                        placeholder="Example: 012345678">
+                </p>
+
+                <p>
+                    <label for="message">Message:</label><br>
+                    <textarea 
+                        id="message" 
+                        name="message" 
+                        rows="5" 
+                        cols="40" 
+                        required 
+                        minlength="10"></textarea>
+                </p>
+
+                <button type="submit">Send Message</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 My Bio Page. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
