@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Tasks</title>
+    <style>
+        /* Base Setup */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #ebf1f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Container Card */
+        .card {
+            background-color: #ffffff;
+            width: 420px;
+            padding: 40px 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+            text-align: center;
+        }
+
+        h1 {
+            color: #1e293b;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            letter-spacing: -0.5px;
+        }
+
+        /* Input Form Row Layout */
+        .form-row {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 10px 14px;
+            font-size: 15px;
+            border: 2px solid #cbd5e1;
+            border-radius: 6px;
+            outline: none;
+            color: #334155;
+            transition: border-color 0.15s ease;
+        }
+
+        input[type="text"]:focus {
+            border-color: #2563eb;
+        }
+
+        .btn-add {
+            background-color: #1e3a8a;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-add:hover {
+            background-color: #172554;
+        }
+
+        /* Dynamic Task List Items */
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .task-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #e2e8f0;
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #0f172a;
+            text-align: left;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .btn-delete {
+            background: none;
+            border: none;
+            color: #dc2626;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            padding: 2px 6px;
+            border-radius: 4px;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-delete:hover {
+            background-color: rgba(220, 38, 38, 0.1);
+        }
+
+        /* Progress Counter Text Summary */
+        .counter-text {
+            font-size: 15px;
+            color: #0f172a;
+            font-weight: 700;
+            margin-top: 10px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>My Tasks</h1>
+        
+        <div class="form-row">
+            <input type="text" id="task-input" placeholder="New task...">
+            <button id="add-btn" class="btn-add">Add</button>
+        </div>
+
+        <div id="task-list" class="task-list"></div>
+
+        <div id="counter-text" class="counter-text">0 of 0 tasks done</div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Memory storage array tracking current lists
+            let tasks = [];
+
+            const taskInput = document.getElementById('task-input');
+            const addBtn = document.getElementById('add-btn');
+            const taskListContainer = document.getElementById('task-list');
+            const counterText = document.getElementById('counter-text');
+
+            // Primary render orchestration loop
+            function renderTasks() {
+                // Clear active layout nodes
+                taskListContainer.innerHTML = '';
+
+                // Generate and inject list elements
+                tasks.forEach((task, index) => {
+                    const taskItem = document.createElement('div');
+                    taskItem.className = 'task-item';
+                    
+                    const taskName = document.createElement('span');
+                    taskName.textContent = task.name;
+                    
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.className = 'btn-delete';
+                    deleteBtn.textContent = 'x';
+                    
+                    // Bind delete listener function scope directly using index mapping
+                    deleteBtn.addEventListener('click', () => {
+                        removeTask(index);
+                    });
+
+                    taskItem.appendChild(taskName);
+                    taskItem.appendChild(deleteBtn);
+                    taskListContainer.appendChild(taskItem);
+                });
+
+                // Compute counter numbers
+                const totalTasks = tasks.length;
+                const completedTasks = tasks.filter(t => t.completed).length; 
+                
+                // Update tracker summary view text
+                counterText.textContent = `${completedTasks} of ${totalTasks} tasks done`;
+            }
+
+            // Append item logic
+            function addTask() {
+                const textValue = taskInput.value.trim();
+                
+                if (textValue === "") return;
+
+                // Push new object configuration into memory space
+                tasks.push({
+                    name: textValue,
+                    completed: false // Scalable boundary metric defaults to incomplete
+                });
+
+                // Reset field controls and refresh lists
+                taskInput.value = '';
+                renderTasks();
+                taskInput.focus();
+            }
+
+            // Remove item slice routine callback
+            function removeTask(index) {
+                tasks.splice(index, 1);
+                renderTasks();
+            }
+
+            // Click listener binding
+            addBtn.addEventListener('click', addTask);
+
+            // Form element keyboard entry mapping
+            taskInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    addTask();
+                }
+            });
+
+            // Run base display initialization pass
+            renderTasks();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade Checker</title>
+    <style>
+        /* Reset and Base Layout */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #ebf1f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Card Container */
+        .card {
+            background-color: #ffffff;
+            width: 400px;
+            padding: 40px 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+            text-align: center;
+        }
+
+        h1 {
+            color: #000000;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            letter-spacing: -0.5px;
+        }
+
+        /* Form Group Layout */
+        .form-group {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        /* Input Field styling matching video focus states */
+        input[type="number"] {
+            width: 140px;
+            padding: 10px 14px;
+            font-size: 16px;
+            border: 2px solid #cbd5e1;
+            border-radius: 6px;
+            outline: none;
+            color: #334155;
+            transition: border-color 0.15s ease;
+        }
+
+        input[type="number"]:focus {
+            border-color: #2563eb;
+        }
+
+        /* Button Styling */
+        .btn {
+            background-color: #1e3a8a;
+            color: #ffffff;
+            border: none;
+            padding: 10px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn:hover {
+            background-color: #172554;
+        }
+
+        /* Result Panel Styling */
+        .result-box {
+            font-size: 20px;
+            font-weight: 700;
+            margin-top: 10px;
+            min-height: 30px; /* Prevents card layout layout shift */
+        }
+
+        /* Dynamic Color Classes based on standard grading bounds */
+        .grade-a { color: #166534; } /* Green */
+        .grade-c { color: #ea580c; } /* Orange */
+        .grade-f { color: #dc2626; } /* Red */
+        .error   { color: #64748b; font-size: 16px; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>Grade Checker</h1>
+        
+        <div class="form-group">
+            <input type="number" id="score-input" placeholder="0 - 100" min="0" max="100">
+            <button id="check-btn" class="btn">Check</button>
+        </div>
+
+        <div id="result" class="result-box"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const scoreInput = document.getElementById('score-input');
+            const checkBtn = document.getElementById('check-btn');
+            const resultBox = document.getElementById('result');
+
+            checkBtn.addEventListener('click', () => {
+                const inputValue = scoreInput.value.trim();
+                
+                // Validation check for empty entry
+                if (inputValue === "") {
+                    resultBox.className = "result-box error";
+                    resultBox.textContent = "Please enter a score.";
+                    return;
+                }
+
+                const score = parseFloat(inputValue);
+
+                // Validation check for numerical out-of-bounds ranges
+                if (score < 0 || score > 100 || isNaN(score)) {
+                    resultBox.className = "result-box error";
+                    resultBox.textContent = "Score must be between 0 and 100.";
+                    return;
+                }
+
+                let grade = '';
+                let colorClass = '';
+
+                // Grading Logic matching video outputs (100 -> A, 50 -> C, 45 -> F)
+                if (score >= 85) {
+                    grade = 'A';
+                    colorClass = 'grade-a';
+                } else if (score >= 50) {
+                    grade = 'C';
+                    colorClass = 'grade-c';
+                } else {
+                    grade = 'F';
+                    colorClass = 'grade-f';
+                }
+
+                // Render out elements inside container target markup block
+                resultBox.className = `result-box ${colorClass}`;
+                resultBox.textContent = `Score: ${score} - Grade ${grade}`;
+            });
+
+            // Optional: Allows submission by pressing the 'Enter' key inside input fields
+            scoreInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    checkBtn.click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiplication Table</title>
+    <style>
+        /* Base Page Setup */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding-top: 10vh;
+        }
+
+        /* Container Grid Layout */
+        .wrapper {
+            text-align: center;
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: #000000;
+            font-size: 34px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            letter-spacing: -0.5px;
+        }
+
+        /* Form Row Alignment */
+        .form-row {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 30px;
+            width: 100%;
+        }
+
+        /* Input Custom Styling */
+        input[type="number"] {
+            width: 160px;
+            padding: 10px 14px;
+            font-size: 16px;
+            border: 2px solid #cbd5e1;
+            border-radius: 6px;
+            outline: none;
+            color: #334155;
+            transition: border-color 0.15s ease;
+        }
+
+        input[type="number"]:focus {
+            border-color: #2563eb;
+        }
+
+        /* Button Custom Styling */
+        .btn {
+            background-color: #1e3a8a;
+            color: #ffffff;
+            border: none;
+            padding: 10px 24px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn:hover {
+            background-color: #172554;
+        }
+
+        /* Generated Table Styling */
+        .table-container {
+            width: 280px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #cbd5e1;
+            display: none; /* Initially hidden until generated */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #ffffff;
+        }
+
+        th {
+            background-color: #1e3a8a;
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: 600;
+            padding: 12px;
+        }
+
+        td {
+            padding: 10px;
+            font-size: 15px;
+            color: #0f172a;
+            border-top: 1px solid #e2e8f0;
+            font-weight: 500;
+        }
+
+        /* Border between expression column and result column */
+        th:first-child, td:first-child {
+            border-right: 1px solid #cbd5e1;
+            width: 60%;
+        }
+
+        /* Zebra striping for look matching video rows */
+        tr:nth-child(even) td {
+            background-color: #f8fafc;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="wrapper">
+        <h1>Multiplication Table</h1>
+        
+        <div class="form-row">
+            <input type="number" id="num-input" placeholder="Enter number">
+            <button id="gen-btn" class="btn">Generate</button>
+        </div>
+
+        <div id="table-container" class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Expression</th>
+                        <th>Result</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const numInput = document.getElementById('num-input');
+            const genBtn = document.getElementById('gen-btn');
+            const tableContainer = document.getElementById('table-container');
+            const tableBody = document.getElementById('table-body');
+
+            genBtn.addEventListener('click', () => {
+                const inputValue = numInput.value.trim();
+
+                // Do nothing if input string field value content checks out empty
+                if (inputValue === "") {
+                    tableContainer.style.display = 'none';
+                    return;
+                }
+
+                const number = parseInt(inputValue, 10);
+                
+                // Safety evaluation fallback checks
+                if (isNaN(number)) return;
+
+                // Clear previous runtime markup loop generation structures 
+                tableBody.innerHTML = "";
+
+                // Generate rows dynamically from multiplier levels 1 through 9
+                for (let i = 1; i <= 9; i++) {
+                    const row = document.createElement('tr');
+                    
+                    const expressionCell = document.createElement('td');
+                    expressionCell.textContent = `${number} x ${i}`;
+                    
+                    const resultCell = document.createElement('td');
+                    resultCell.textContent = number * i;
+                    
+                    row.appendChild(expressionCell);
+                    row.appendChild(resultCell);
+                    tableBody.appendChild(row);
+                }
+
+                // Smooth structural layout visibility activation switch logic
+                tableContainer.style.display = 'block';
+            });
+
+            // Optional enhancement: Trigger calculation instantly on Enter keypress
+            numInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    genBtn.click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

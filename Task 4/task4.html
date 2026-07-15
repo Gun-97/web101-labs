@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Scores Dashboard</title>
+    <style>
+        /* Base Setup */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #ebf1f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Main Container Card */
+        .card {
+            background-color: #ffffff;
+            width: 420px;
+            padding: 40px 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+            text-align: center;
+        }
+
+        h1 {
+            color: #000000;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            letter-spacing: -0.5px;
+        }
+
+        /* Score List Container */
+        .score-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 24px;
+            max-height: 280px;
+            overflow-y: auto;
+            padding: 5px;
+        }
+
+        .score-item {
+            font-size: 18px;
+            font-weight: 700;
+            transition: all 0.2s ease;
+        }
+
+        /* Dynamic Color Coding Rules */
+        .score-high { color: #166534; }   /* Green (>= 85) */
+        .score-mid { color: #ea580c; }    /* Orange (50-84) */
+        .score-low { color: #dc2626; }    /* Red (< 50) */
+
+        /* Statistics Layout Segment */
+        .stats-bar {
+            font-size: 14.5px;
+            color: #1e293b;
+            font-weight: 600;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 16px;
+            margin-bottom: 20px;
+        }
+
+        /* Form Inputs Wrapper */
+        .form-row {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+        }
+
+        input[type="number"] {
+            width: 130px;
+            padding: 10px 14px;
+            font-size: 15px;
+            border: 2px solid #cbd5e1;
+            border-radius: 6px;
+            outline: none;
+            color: #334155;
+            transition: border-color 0.15s ease;
+        }
+
+        input[type="number"]:focus {
+            border-color: #2563eb;
+        }
+
+        .btn {
+            background-color: #1e3a8a;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn:hover {
+            background-color: #172554;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>Student Scores</h1>
+        
+        <div id="score-list" class="score-list"></div>
+
+        <div id="stats-bar" class="stats-bar">
+            Highest: 0 | Lowest: 0 | Average: 0.0
+        </div>
+
+        <div class="form-row">
+            <input type="number" id="score-input" placeholder="New score">
+            <button id="add-btn" class="btn">Add score</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Setup base starting elements matching the beginning states of the sequence
+            let scores = [45, 82, 91, 60, 77, 33];
+
+            const scoreListContainer = document.getElementById('score-list');
+            const statsBar = document.getElementById('stats-bar');
+            const scoreInput = document.getElementById('score-input');
+            const addBtn = document.getElementById('add-btn');
+
+            // Primary render loop method 
+            function renderDashboard() {
+                // Clear active target lists
+                scoreListContainer.innerHTML = '';
+
+                // Generate item layouts with class color bindings
+                scores.forEach(score => {
+                    const scoreDiv = document.createElement('div');
+                    scoreDiv.textContent = score;
+                    
+                    // Assign styles dynamically based on metric boundaries
+                    if (score >= 85) {
+                        scoreDiv.className = 'score-item score-high';
+                    } else if (score >= 50) {
+                        scoreDiv.className = 'score-item score-mid';
+                    } else {
+                        scoreDiv.className = 'score-item score-low';
+                    }
+                    
+                    scoreListContainer.appendChild(scoreDiv);
+                });
+
+                // Compute array math metrics
+                const highest = Math.max(...scores);
+                const lowest = Math.min(...scores);
+                const sum = scores.reduce((acc, curr) => acc + curr, 0);
+                const average = scores.length ? (sum / scores.length).toFixed(1) : 0.0;
+
+                // Update text summary elements
+                statsBar.textContent = `Highest: ${highest} | Lowest: ${lowest} | Average: ${average}`;
+            }
+
+            // Input validation and collection listener callback
+            addBtn.addEventListener('click', () => {
+                const inputValue = scoreInput.value.trim();
+
+                if (inputValue === "") return;
+
+                const newScore = parseInt(inputValue, 10);
+
+                // Range protection validation alert mapping standard window boxes
+                if (isNaN(newScore) || newScore < 0 || newScore > 100) {
+                    alert("Please enter a score between 0 and 100");
+                    return;
+                }
+
+                // Append parsed collection data into application memory frame array
+                scores.push(newScore);
+                
+                // Refresh dashboard components
+                renderDashboard();
+                
+                // Clear out control parameters
+                scoreInput.value = '';
+                scoreInput.focus();
+            });
+
+            // Bind calculations execution handler to Enter Key event updates
+            scoreInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    addBtn.click();
+                }
+            });
+
+            // Initialize display on standard layout mount runtimes
+            renderDashboard();
+        });
+    </script>
+</body>
+</html>
